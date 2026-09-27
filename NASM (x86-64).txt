@@ -1,4 +1,4 @@
-NASM x86-64 Assembly is the most used today, it is for mainly for Intel and AMD CPUs. It is the most modern version of Assembly, it is recommended. It is also pointer based.
+NASM is an assembler for x86 and x86-64 processors. It uses Intel-style syntax.
 
 Moving Data:
 
