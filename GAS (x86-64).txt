@@ -1,0 +1,308 @@
+GNU x86-64 Assembly is the assembly syntax used by the GNU Assembler, also called GAS or 'as'. It is mainly used on Linux and other Unix-like operating systems. This documentary uses AT&T syntax. AT&T syntax puts the source first and the destination second, and registers use a % symbol.
+
+Moving Data:
+
+mov - This copies data from one location to another. Use is mov <source>, <destination>
+
+push - This takes a value and puts it on the stack. Use is push <operand>
+
+pop - This takes a value from the stack and puts it into the operand. Use is pop <operand>
+
+lea - This calculates an address before moving it to a register. Use is lea <memory>, <register>
+
+xchg - This swaps the values between two operands. Use is xchg <operand1>, <operand2>
+
+Immediate Values:
+
+An immediate is a value written directly in an instruction. It uses a $ symbol.
+
+For example,
+
+mov $10, %rax
+
+This puts 10 into RAX.
+
+Registers:
+
+Registers are small and fast storage locations inside the CPU used to hold data, addresses, and results.
+
+The 64-bit registers are,
+
+RAX, RBX, RCX, RDX, RSI, RDI, RBP, RSP, and R8 up to R15
+
+Registers use a % symbol.
+
+For example,
+
+%rax
+%rbx
+%rcx
+
+Sub-registers include,
+
+EAX (32 bits), AX (16 bits), AL (8 bits), and AH (8 bits)
+
+Stack:
+
+The stack is a part of RAM or memory used for temporary data.
+
+RSP - The pointer which points to the top of the stack.
+
+The stack works in Last In, First Out order.
+
+Comments:
+
+A comment is text in the code ignored by the assembler. It uses the # symbol.
+
+#This is a comment
+
+Mathematics:
+
+add - This adds two values. Use is add <source>, <destination>
+
+sub - This subtracts two values. Use is sub <source>, <destination>
+
+inc - This increases a value by one. Use is inc <operand>
+
+dec - This decreases a value by one. Use is dec <operand>
+
+imul - This multiplies signed integers. Use is imul <source>, <destination>
+
+mul - This multiplies unsigned integers. Use is mul <operand>
+
+idiv - This divides signed integers. Use is idiv <operand>
+
+div - This divides unsigned integers. Use is div <operand>
+
+neg - This turns a value to its negative. Use is neg <operand>
+
+Bit Operations:
+
+and - This performs a bit-by-bit AND operation. Use is and <source>, <destination>
+
+or - This performs a bit-by-bit OR operation. Use is or <source>, <destination>
+
+xor - This performs a bit-by-bit XOR operation. Use is xor <source>, <destination>
+
+not - This flips the bits. 1 becomes 0 and 0 becomes 1. Use is not <operand>
+
+shl - This shifts the bits to the left. Use is shl <amount>, <operand>
+
+shr - This shifts the bits to the right. Use is shr <amount>, <operand>
+
+sar - This shifts the bits to the right while preserving the sign. Use is sar <amount>, <operand>
+
+Comparisons and Conditions:
+
+cmp - This compares two operands by subtracting the source from the destination without storing the result. Use is cmp <source>, <destination>
+
+test - This performs a bit AND operation without storing the result. Use is test <operand1>, <operand2>
+
+jz - Jumps to a label if the previous result was zero. Use is jz <label>
+
+jnz - Jumps to a label if the previous result was not zero. Use is jnz <label>
+
+jg - Jumps to a label if the first value was greater than the second using signed numbers. Use is jg <label>
+
+jl - Jumps to a label if the first value was less than the second using signed numbers. Use is jl <label>
+
+je - Jumps to a label if the two values are equal. Use is je <label>
+
+jne - Jumps to a label if the two values are not equal. Use is jne <label>
+
+Labels:
+
+A label is a name that marks a location in the code. It ends with a colon.
+
+For example,
+
+_start:
+
+    mov $60, %rax
+    mov $0, %rdi
+    syscall
+
+You can make a label visible to the linker using .globl.
+
+Jumps:
+
+jmp - Jumps to a specified label. Use is jmp <label>
+
+call - Calls a specified label like a function. Use is call <label>
+
+ret - Returns from a function. Use is ret
+
+Sections:
+
+A section is a named division of a program that contains code or data. Stated using .section <section>.
+
+.text - Contains the actual CPU instructions.
+
+.data - Contains variables with starting values.
+
+.bss - Reserves space for variables without starting values.
+
+.rodata - Contains read-only data such as constants and strings.
+
+Syscall:
+
+Syscall is used to ask the operating system kernel to perform something.
+
+On Linux x86-64, RAX contains the syscall number and RDI, RSI, RDX, R10, R8, and R9 contain the arguments.
+
+For example,
+
+mov $60, %rax
+mov $0, %rdi
+syscall
+
+This exits the program with exit code 0.
+
+Syscalls are very operating-system based.
+
+Memory Addressing:
+
+Memory addresses use parentheses around registers.
+
+For example,
+
+mov (%rax), %rbx
+mov 8(%rax), %rbx
+mov 16(%rax,%rbx,4), %rcx
+
+The last example calculates,
+
+RAX + RBX*4 + 16
+
+Data Sizes:
+
+Data sizes are how much data an instruction operates on or stores.
+
+8-bit = 1 byte
+16-bit = 2 bytes
+32-bit = 4 bytes
+64-bit = 8 bytes
+
+They can be called,
+
+b = 8-bit
+w = 16-bit
+l = 32-bit
+q = 64-bit
+
+For example,
+
+movb $10, %al
+movw $10, %ax
+movl $10, %eax
+movq $10, %rax
+
+Strings:
+
+A string is a sequence of characters stored in memory.
+
+For example,
+
+message:
+    .asciz "Hello, World!"
+
+.asciz creates a string with a zero at the end.
+
+Arrays:
+
+An array is multiple values stored next to each other in memory.
+
+For example,
+
+numbers:
+    .long 10, 20, 30, 40
+
+This creates four 32-bit values.
+
+You can access an element using an index.
+
+mov numbers(,%rcx,4), %eax
+
+The 4 is used because each value is 4 bytes.
+
+Data Definition:
+
+.byte - Defines 8-bit values. Use is .byte <value>
+
+.word - Defines 16-bit values. Use is .word <value>
+
+.long - Defines 32-bit values. Use is .long <value>
+
+.quad - Defines 64-bit values. Use is .quad <value>
+
+For example,
+
+.byte 10
+.word 1000
+.long 100000
+.quad 1000000000
+
+Functions:
+
+A function is a section of code that can be called from another section.
+
+For example,
+
+my_function:
+    mov $123, %rax
+    ret
+
+You can call it using,
+
+call my_function
+
+call saves the return address and jumps to the function.
+
+ret goes back to the saved address.
+
+Global Symbols:
+
+.globl makes a label visible to the linker.
+
+For example,
+
+.globl _start
+
+_start:
+    mov $60, %rax
+    mov $0, %rdi
+    syscall
+
+Directives:
+
+Directives are commands for the assembler instead of the CPU.
+
+Examples,
+
+.section
+.globl
+.byte
+.word
+.long
+.quad
+.asciz
+
+Intel Syntax:
+
+GNU Assembler can also use Intel syntax.
+
+Use,
+
+.intel_syntax noprefix
+
+For example, AT&T syntax,
+
+mov $10, %rax
+
+Intel syntax,
+
+mov rax, 10
+
+AT&T uses source, destination.
+
+Intel syntax uses destination, source.
